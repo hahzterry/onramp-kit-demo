@@ -24,7 +24,7 @@ import {
   createOnrampKit,
   fetchOnrampSession,
   type OnrampEventEnvelope,
-} from '@crcl-main/onramp-kit'
+} from '@circle-fin/onramp-kit'
 import { WIDGET_BASE_URL, type OnrampEnvironment } from '@/lib/onramp-environment'
 import { BottomNav, tabs, type TabId } from './bottom-nav'
 import { HomeScreen } from './home-screen'

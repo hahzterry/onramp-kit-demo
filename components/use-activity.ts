@@ -19,7 +19,7 @@
 'use client'
 
 import { useCallback, useSyncExternalStore } from 'react'
-import { ONRAMP_EVENT_TYPES, type OnrampEventEnvelope } from '@crcl-main/onramp-kit'
+import { ONRAMP_EVENT_TYPES, type OnrampEventEnvelope } from '@circle-fin/onramp-kit'
 
 /** The two widget events that describe a deposit, and so produce a row. */
 export type DepositEnvelope = Extract<
