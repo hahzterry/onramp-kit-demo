@@ -17,9 +17,9 @@
  */
 
 import {
-  createOnrampServerKit,
+  createAppServerKit,
   createSessionRouteHandler,
-} from '@circle-fin/onramp-kit'
+} from '@circle-fin/app-kit/server'
 import { API_BASE_URL, ENVIRONMENT } from '@/lib/server-environment'
 import { WIDGET_BASE_URL } from '@/lib/onramp-environment'
 
@@ -37,10 +37,11 @@ if (!kitKey) {
 // Both URLs are passed through verbatim. Undefined leaves the kit on its own
 // defaults, https://api.circle.com and https://onramp.arc.io, which is mainnet
 // and moves real money.
-const server = createOnrampServerKit({
-  kitKey,
-  baseUrl: API_BASE_URL,
-  widgetBaseUrl: WIDGET_BASE_URL,
+const server = createAppServerKit({
+  onramp: {
+    apiKey: process.env.ONRAMP_KIT_KEY!.trim(),
+    referrerDomain: 'your.domain.com',
+  },
 })
 
-export const POST = createSessionRouteHandler(server)
+export const POST = createSessionRouteHandler(server.onramp)
