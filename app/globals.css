@@ -1,112 +1,376 @@
-export const MonYunyLogo = ({ className = 'w-80 h-auto' }: { className?: string }) => {
+export const MonYunyLogo = ({
+  className = 'w-80 h-auto',
+}: {
+  className?: string;
+}) => {
   return (
     <svg
-      viewBox="0 0 400 120"
+      viewBox="0 0 500 180"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
+      role="img"
+      aria-label="MonYuny"
     >
       <defs>
-        {/* Glow effect for the Arc Blue elements */}
-        <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="4" result="blur" />
-          <feComposite in="SourceGraphic" in2="blur" operator="over" />
-        </filter>
-        
-        {/* Gradient for the digital assets */}
-        <linearGradient id="assetGradient" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="var(--color-primary)" stopOpacity="0.8"/>
-          <stop offset="100%" stopColor="var(--color-ring)" stopOpacity="0.3"/>
+        {/* Core brand colors */}
+        <linearGradient id="blueGradient" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#19AFFF" />
+          <stop offset="100%" stopColor="#0066FF" />
         </linearGradient>
+        <linearGradient id="goldGradient" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#FFE86A" />
+          <stop offset="100%" stopColor="#F5B800" />
+        </linearGradient>
+        <linearGradient id="greenGradient" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#63E66D" />
+          <stop offset="100%" stopColor="#19A83A" />
+        </linearGradient>
+        {/* Black sticker shadow */}
+        <filter
+          id="stickerShadow"
+          x="-30%"
+          y="-30%"
+          width="160%"
+          height="170%"
+        >
+          <feDropShadow
+            dx="5"
+            dy="7"
+            stdDeviation="0"
+            floodColor="#000000"
+            floodOpacity="1"
+          />
+        </filter>
+        {/* Soft blue glow */}
+        <filter
+          id="blueGlow"
+          x="-50%"
+          y="-50%"
+          width="200%"
+          height="200%"
+        >
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
       </defs>
-
-      {/* Main Card Background (Replaces the flat white background) */}
-      <rect 
-        x="10" y="20" width="380" height="80" rx="18"
-        fill="var(--color-card)" 
-        stroke="var(--color-border)" 
-        strokeWidth="1.5"
+      {/* =========================================================
+          BLUE STICKER / OUTLINE BACKDROP
+          ========================================================= */}
+      <path
+        d="
+          M62 44
+          C45 46 32 57 28 72
+          C23 91 31 112 47 123
+          C37 137 43 153 59 159
+          C75 165 91 158 101 149
+          C119 162 143 166 163 157
+          C182 168 205 168 224 158
+          C245 169 270 165 285 151
+          C303 160 324 156 334 141
+          C349 151 368 146 374 130
+          C391 137 409 127 411 110
+          C425 103 429 86 420 74
+          C426 57 414 42 398 39
+          C390 23 372 17 356 24
+          C344 10 321 8 307 19
+          C289 8 265 10 252 23
+          C232 11 208 13 195 27
+          C177 14 151 15 138 29
+          C120 19 96 23 87 39
+          C78 38 69 39 62 44
+          Z
+        "
+        fill="url(#blueGradient)"
+        stroke="#000000"
+        strokeWidth="7"
+        strokeLinejoin="round"
+        filter="url(#stickerShadow)"
       />
-      
-      {/* Subtle inner glow / highlight line for depth */}
-      <rect 
-        x="11" y="21" width="378" height="78" rx="16"
-        stroke="var(--color-muted-foreground)" 
-        strokeOpacity="0.1" 
-        strokeWidth="1"
+      {/* =========================================================
+          BLUE SPLASH ACCENTS
+          ========================================================= */}
+      <path
+        d="M36 51 C18 42 12 29 21 19"
+        stroke="#19AFFF"
+        strokeWidth="8"
+        strokeLinecap="round"
       />
-
-      {/* Abstract "Digital Asset" shapes - Top Left */}
-      <g transform="translate(40, 35)">
-        <path d="M0 15 L15 0 L30 15 L15 30 Z" fill="url(#assetGradient)" />
-        <path d="M5 15 L15 5 L25 15 L15 25 Z" fill="var(--color-primary)" fillOpacity="0.3" />
-      </g>
-
-      {/* Abstract "Digital Asset" shapes - Top Right (The Crown) */}
-      <g transform="translate(320, 30)">
-        {/* Stylized Crown */}
-        <path 
-          d="M0 15 L5 5 L12 12 L20 0 L28 12 L35 5 L40 15 Z" 
-          fill="var(--color-primary)" 
-          filter="url(#glow)"
+      <path
+        d="M414 51 C431 43 439 31 433 20"
+        stroke="#19AFFF"
+        strokeWidth="8"
+        strokeLinecap="round"
+      />
+      <path
+        d="M46 132 C28 139 21 151 29 161"
+        stroke="#19AFFF"
+        strokeWidth="7"
+        strokeLinecap="round"
+      />
+      <path
+        d="M397 132 C417 140 422 151 414 162"
+        stroke="#19AFFF"
+        strokeWidth="7"
+        strokeLinecap="round"
+      />
+      {/* =========================================================
+          MONEY STACK — GREEN
+          ========================================================= */}
+      <g
+        transform="translate(55 103) rotate(-8)"
+        stroke="#000000"
+        strokeWidth="4"
+        strokeLinejoin="round"
+      >
+        {/* Back bill */}
+        <rect
+          x="0"
+          y="10"
+          width="54"
+          height="27"
+          rx="5"
+          fill="#128B32"
         />
-        <circle cx="20" cy="18" r="2" fill="var(--color-background)" />
-        {/* Floating sparks */}
-        <circle cx="-5" cy="5" r="1.5" fill="var(--color-ring)" />
-        <circle cx="45" cy="2" r="1" fill="var(--color-ring)" />
+        {/* Middle bill */}
+        <rect
+          x="5"
+          y="5"
+          width="54"
+          height="27"
+          rx="5"
+          fill="#27B942"
+        />
+        {/* Front bill */}
+        <rect
+          x="10"
+          y="0"
+          width="54"
+          height="27"
+          rx="5"
+          fill="url(#greenGradient)"
+        />
+        <circle
+          cx="37"
+          cy="13.5"
+          r="8"
+          fill="none"
+        />
+        <text
+          x="37"
+          y="18"
+          textAnchor="middle"
+          fontFamily="Arial, sans-serif"
+          fontSize="12"
+          fontWeight="900"
+          fill="#FFFFFF"
+          stroke="none"
+        >
+          $
+        </text>
       </g>
-
-      {/* Main Brand Text */}
-      <g transform="translate(80, 75)">
-        {/* "Mon" - Clean, high contrast */}
-        <text 
-          fontFamily="var(--font-sans)" 
-          fontWeight="800" 
-          fontSize="42" 
-          fill="var(--color-foreground)" 
-          letterSpacing="-0.02em"
+      {/* =========================================================
+          CROWN
+          ========================================================= */}
+      <g transform="translate(366 25)">
+        <path
+          d="
+            M0 29
+            L8 7
+            L22 19
+            L34 0
+            L47 19
+            L62 7
+            L70 29
+            Z
+          "
+          fill="url(#blueGradient)"
+          stroke="#000000"
+          strokeWidth="5"
+          strokeLinejoin="round"
+          filter="url(#blueGlow)"
+        />
+        {/* Crown highlight */}
+        <path
+          d="M10 26 L18 12 L27 21"
+          stroke="#FFFFFF"
+          strokeWidth="4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        {/* Crown jewels */}
+        <circle
+          cx="34"
+          cy="29"
+          r="4"
+          fill="#FFFFFF"
+          stroke="#000000"
+          strokeWidth="2"
+        />
+        <circle
+          cx="7"
+          cy="6"
+          r="3"
+          fill="#FFE34D"
+          stroke="#000000"
+          strokeWidth="2"
+        />
+        <circle
+          cx="62"
+          cy="6"
+          r="3"
+          fill="#FFE34D"
+          stroke="#000000"
+          strokeWidth="2"
+        />
+      </g>
+      {/* =========================================================
+          MONYUNY WORDMARK
+          ========================================================= */}
+      <g
+        fontFamily="Arial Black, Arial, sans-serif"
+        fontWeight="900"
+        fontSize="62"
+        letterSpacing="-4"
+        paintOrder="stroke fill"
+      >
+        {/* Black sticker shadow / outline */}
+        <text
+          x="91"
+          y="112"
+          fill="#000000"
+          stroke="#000000"
+          strokeWidth="13"
+          strokeLinejoin="round"
         >
           Mon
         </text>
-        
-        {/* "Y" - Accented in Arc Blue */}
-        <text 
-          fontFamily="var(--font-sans)" 
-          fontWeight="800" 
-          fontSize="42" 
-          fill="var(--color-primary)" 
-          letterSpacing="-0.02em"
-          x="82"
+        <text
+          x="91"
+          y="112"
+          fill="#FFFFFF"
+          stroke="#000000"
+          strokeWidth="6"
+          strokeLinejoin="round"
+        >
+          Mon
+        </text>
+        {/* Center Y — blue */}
+        <text
+          x="245"
+          y="112"
+          fill="#006DFF"
+          stroke="#000000"
+          strokeWidth="7"
+          strokeLinejoin="round"
         >
           Y
         </text>
-        
-        {/* "uny" - Clean, high contrast */}
-        <text 
-          fontFamily="var(--font-sans)" 
-          fontWeight="800" 
-          fontSize="42" 
-          fill="var(--color-foreground)" 
-          letterSpacing="-0.02em"
-          x="112"
+        {/* Final uny */}
+        <text
+          x="286"
+          y="112"
+          fill="#FFFFFF"
+          stroke="#000000"
+          strokeWidth="6"
+          strokeLinejoin="round"
         >
           uny
         </text>
-        
-        {/* Sleek underline accent */}
-        <rect 
-          x="0" y="8" width="180" height="3" 
-          fill="var(--color-primary)" 
-          fillOpacity="0.4" 
-          rx="6"
+      </g>
+      {/* =========================================================
+          GOLD COINS
+          ========================================================= */}
+      {/* Top coin */}
+      <g transform="translate(323 121) rotate(-12)">
+        <ellipse
+          cx="0"
+          cy="5"
+          rx="19"
+          ry="8"
+          fill="#B67D00"
+          stroke="#000000"
+          strokeWidth="4"
+        />
+        <ellipse
+          cx="0"
+          cy="0"
+          rx="19"
+          ry="8"
+          fill="url(#goldGradient)"
+          stroke="#000000"
+          strokeWidth="4"
+        />
+        <circle
+          cx="0"
+          cy="0"
+          r="11"
+          fill="none"
+          stroke="#000000"
+          strokeWidth="2"
         />
       </g>
-      
-      {/* Bottom Left "Chip" - Digital wallet metaphor */}
-      <g transform="translate(45, 80)">
-        <rect width="18" height="12" rx="3" fill="none" stroke="var(--color-muted-foreground)" strokeWidth="1.5" strokeOpacity="0.5" />
-        <line x1="9" y1="0" x2="9" y2="12" stroke="var(--color-muted-foreground)" strokeWidth="1" strokeOpacity="0.5" />
+      {/* Bottom coin with dollar sign */}
+      <g transform="translate(365 137) rotate(10)">
+        <ellipse
+          cx="0"
+          cy="7"
+          rx="23"
+          ry="9"
+          fill="#B67D00"
+          stroke="#000000"
+          strokeWidth="4"
+        />
+        <ellipse
+          cx="0"
+          cy="0"
+          rx="23"
+          ry="9"
+          fill="url(#goldGradient)"
+          stroke="#000000"
+          strokeWidth="4"
+        />
+        <circle
+          cx="0"
+          cy="0"
+          r="14"
+          fill="none"
+          stroke="#000000"
+          strokeWidth="2"
+        />
+        <text
+          x="0"
+          y="6"
+          textAnchor="middle"
+          fontFamily="Arial Black, Arial, sans-serif"
+          fontSize="18"
+          fontWeight="900"
+          fill="#000000"
+          stroke="none"
+        >
+          $
+        </text>
       </g>
+      {/* =========================================================
+          BLUE SWOOSH
+          ========================================================= */}
+      <path
+        d="M105 130 C170 153 271 153 348 127"
+        stroke="#000000"
+        strokeWidth="11"
+        strokeLinecap="round"
+        fill="none"
+      />
+      <path
+        d="M105 127 C170 149 271 149 348 124"
+        stroke="#19AFFF"
+        strokeWidth="7"
+        strokeLinecap="round"
+        fill="none"
+      />
     </svg>
   );
 };
