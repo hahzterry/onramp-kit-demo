@@ -19,6 +19,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import detectEthereumProvider from '@metamask/detect-provider'
 import { CopyIcon, WalletIcon } from './icons'
 
 const BUTTON =
@@ -37,6 +38,11 @@ export function WalletScreen({
   // still up restarts the timer instead of doing nothing.
   const [copiedAt, setCopiedAt] = useState(0)
 
+  // Connection error shown inline instead of an alert box, so the UI stays
+  // consistent with the rest of the screen.
+  const [connectError, setConnectError] = useState('')
+  const [connecting, setConnecting] = useState(false)
+
   useEffect(() => {
     if (!copiedAt) return
     const id = setTimeout(() => setCopiedAt(0), 1500)
@@ -53,10 +59,41 @@ export function WalletScreen({
     }
   }
 
+  // ⚠️ MetaMask detection must happen BEFORE calling onConnect, because
+  // onConnect assumes window.ethereum exists. Without this check, clicking
+  // the button on a browser without MetaMask produces an unhelpful
+  // "MetaMask not detected" error from deep inside the wallet library.
+  //
+  // mustBeMetaMask: true is important — other extensions (Phantom,
+  // Coinbase Wallet, Trust) also inject window.ethereum, and we do not
+  // want to hand their provider to a MetaMask-specific connect flow.
+  const handleConnect = async () => {
+    setConnectError('')
+    setConnecting(true)
+    try {
+      const provider = await detectEthereumProvider({ mustBeMetaMask: true })
+      if (!provider) {
+        setConnectError(
+          'MetaMask is not detected. Install it from metamask.io, or open this page inside the MetaMask mobile app.',
+        )
+        return
+      }
+      onConnect()
+    } catch (err) {
+      setConnectError(
+        err instanceof Error ? err.message : 'Unable to detect MetaMask.',
+      )
+    } finally {
+      setConnecting(false)
+    }
+  }
+
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-6 pb-28 [scrollbar-width:none]">
       <div className="pt-10 md:pt-6">
-        <h1 className="font-display text-[30px] leading-[1.2] font-light tracking-[-0.01em]">Wallet</h1>
+        <h1 className="font-display text-[30px] leading-[1.2] font-light tracking-[-0.01em]">
+          Wallet
+        </h1>
         <p className="mt-2 text-base text-muted-foreground">
           {address
             ? 'USDC you buy is delivered to this address.'
@@ -68,8 +105,12 @@ export function WalletScreen({
         <div className="mt-6 flex flex-col gap-3">
           <div className="flex items-center gap-2 rounded-lg bg-secondary py-3.5 pr-2.5 pl-4">
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-medium tracking-tight text-muted-foreground">Address</p>
-              <p className="mt-1 truncate font-mono text-sm text-secondary-foreground">{address}</p>
+              <p className="text-xs font-medium tracking-tight text-muted-foreground">
+                Address
+              </p>
+              <p className="mt-1 truncate font-mono text-sm text-secondary-foreground">
+                {address}
+              </p>
             </div>
             <div className="relative shrink-0">
               <button
@@ -95,10 +136,23 @@ export function WalletScreen({
           </button>
         </div>
       ) : (
-        <button type="button" onClick={onConnect} className={`mt-6 ${BUTTON}`}>
-          <WalletIcon className="size-[18px]" strokeWidth={2} />
-          Connect MetaMask
-        </button>
+        <>
+          <button
+            type="button"
+            onClick={handleConnect}
+            disabled={connecting}
+            className={`mt-6 ${BUTTON} disabled:opacity-50 disabled:cursor-not-allowed`}
+          >
+            <WalletIcon className="size-[18px]" strokeWidth={2} />
+            {connecting ? 'Connecting…' : 'Connect MetaMask'}
+          </button>
+
+          {connectError && (
+            <p className="mt-3 text-sm text-red-600" role="alert">
+              {connectError}
+            </p>
+          )}
+        </>
       )}
     </div>
   )
