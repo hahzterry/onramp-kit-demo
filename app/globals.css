@@ -1,84 +1,112 @@
-/**
- * Copyright 2026 Circle Internet Group, Inc.  All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * SPDX-License-Identifier: Apache-2.0
- */
+export const MonYunyLogo = ({ className = 'w-80 h-auto' }: { className?: string }) => {
+  return (
+    <svg
+      viewBox="0 0 400 120"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+    >
+      <defs>
+        {/* Glow effect for the Arc Blue elements */}
+        <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="4" result="blur" />
+          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
+        
+        {/* Gradient for the digital assets */}
+        <linearGradient id="assetGradient" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="var(--color-primary)" stopOpacity="0.8"/>
+          <stop offset="100%" stopColor="var(--color-ring)" stopOpacity="0.3"/>
+        </linearGradient>
+      </defs>
 
-@import 'tailwindcss';
+      {/* Main Card Background (Replaces the flat white background) */}
+      <rect 
+        x="10" y="20" width="380" height="80" rx="18"
+        fill="var(--color-card)" 
+        stroke="var(--color-border)" 
+        strokeWidth="1.5"
+      />
+      
+      {/* Subtle inner glow / highlight line for depth */}
+      <rect 
+        x="11" y="21" width="378" height="78" rx="16"
+        stroke="var(--color-muted-foreground)" 
+        strokeOpacity="0.1" 
+        strokeWidth="1"
+      />
 
-/* Palette, type scale and radii lifted from the onramp widget's own stylesheet
-   (https://onramp.arc.io, `[data-brand=arc]`), so the host app and the embedded
-   iframe render from one set of values and the seam between them disappears.
-   Widget token names are noted next to each entry: when the widget's theme
-   moves, re-read that stylesheet and update these in step. */
-@theme {
-  /* DM Sans for everything, Space Grotesk for display figures, Space Mono for
-     code. The faces are loaded in app/layout.tsx. */
-  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
-    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  --font-display: var(--font-space-grotesk), var(--font-dm-sans), sans-serif;
-  --font-mono: var(--font-space-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+      {/* Abstract "Digital Asset" shapes - Top Left */}
+      <g transform="translate(40, 35)">
+        <path d="M0 15 L15 0 L30 15 L15 30 Z" fill="url(#assetGradient)" />
+        <path d="M5 15 L15 5 L25 15 L15 25 Z" fill="var(--color-primary)" fillOpacity="0.3" />
+      </g>
 
-  --color-background: #0d1b2f; /* --arc-bg-surface-primary */
-  --color-foreground: #f5f5f8; /* --arc-text-neutral */
-  --color-card: #1f2f44; /* --arc-bg-surface-elevated */
-  --color-primary: #acc6e9; /* --arc-bg-bold-interactive */
-  --color-primary-foreground: #000000; /* --arc-text-invert */
-  --color-secondary: #ffffff0d; /* --arc-bg-surface-cardandinput */
-  --color-secondary-foreground: #f5f5f8; /* --arc-text-neutral */
-  --color-muted: #ffffff14; /* --arc-bg-interactive-neutral */
-  --color-muted-foreground: #a7a3b5; /* --arc-text-neutral-subtlest */
-  --color-destructive: #d23e5c; /* --color-arc-red-muted-500 */
-  --color-border: #ffffff26; /* --arc-border-neutral-subtle */
-  --color-ring: #1aa3ff; /* --arc-border-focused */
+      {/* Abstract "Digital Asset" shapes - Top Right (The Crown) */}
+      <g transform="translate(320, 30)">
+        {/* Stylized Crown */}
+        <path 
+          d="M0 15 L5 5 L12 12 L20 0 L28 12 L35 5 L40 15 Z" 
+          fill="var(--color-primary)" 
+          filter="url(#glow)"
+        />
+        <circle cx="20" cy="18" r="2" fill="var(--color-background)" />
+        {/* Floating sparks */}
+        <circle cx="-5" cy="5" r="1.5" fill="var(--color-ring)" />
+        <circle cx="45" cy="2" r="1" fill="var(--color-ring)" />
+      </g>
 
-  /* The device sits on a light stage, tinted with the widget's blue-greys so it
-     reads as part of the same system rather than a neutral screenshot mat. */
-  --color-app-canvas: #eaf0f5; /* --color-arc-blue-grey-50 */
-  --color-device-frame: #f4f7fa; /* --color-arc-blue-grey-25 */
-  --color-device-frame-border: #afc6d9; /* --color-arc-blue-grey-100 */
-  --color-device-button: #e0e9f0; /* --color-arc-blue-grey-75 */
-
-  /* --arc-radius-*. The widget tops out at 18px, so `rounded-lg` is the widest
-     corner anything in the phone should use. */
-  --radius-xs: 6px;
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 18px;
-
-  --animate-device-in: enter 700ms var(--ease-out);
-  --animate-screen-in: enter 200ms var(--ease-out);
-  --animate-screen-in-left: slide-from-left 200ms var(--ease-out);
-  --animate-screen-in-right: slide-from-right 200ms var(--ease-out);
-
-  @keyframes enter {
-    from {
-      opacity: 0;
-      transform: scale3d(0.95, 0.95, 0.95);
-    }
-  }
-  @keyframes slide-from-left {
-    from {
-      opacity: 0;
-      transform: translate3d(-2rem, 0, 0);
-    }
-  }
-  @keyframes slide-from-right {
-    from {
-      opacity: 0;
-      transform: translate3d(2rem, 0, 0);
-    }
-  }
-}
+      {/* Main Brand Text */}
+      <g transform="translate(80, 75)">
+        {/* "Mon" - Clean, high contrast */}
+        <text 
+          fontFamily="var(--font-sans)" 
+          fontWeight="800" 
+          fontSize="42" 
+          fill="var(--color-foreground)" 
+          letterSpacing="-0.02em"
+        >
+          Mon
+        </text>
+        
+        {/* "Y" - Accented in Arc Blue */}
+        <text 
+          fontFamily="var(--font-sans)" 
+          fontWeight="800" 
+          fontSize="42" 
+          fill="var(--color-primary)" 
+          letterSpacing="-0.02em"
+          x="82"
+        >
+          Y
+        </text>
+        
+        {/* "uny" - Clean, high contrast */}
+        <text 
+          fontFamily="var(--font-sans)" 
+          fontWeight="800" 
+          fontSize="42" 
+          fill="var(--color-foreground)" 
+          letterSpacing="-0.02em"
+          x="112"
+        >
+          uny
+        </text>
+        
+        {/* Sleek underline accent */}
+        <rect 
+          x="0" y="8" width="180" height="3" 
+          fill="var(--color-primary)" 
+          fillOpacity="0.4" 
+          rx="6"
+        />
+      </g>
+      
+      {/* Bottom Left "Chip" - Digital wallet metaphor */}
+      <g transform="translate(45, 80)">
+        <rect width="18" height="12" rx="3" fill="none" stroke="var(--color-muted-foreground)" strokeWidth="1.5" strokeOpacity="0.5" />
+        <line x1="9" y1="0" x2="9" y2="12" stroke="var(--color-muted-foreground)" strokeWidth="1" strokeOpacity="0.5" />
+      </g>
+    </svg>
+  );
+};
