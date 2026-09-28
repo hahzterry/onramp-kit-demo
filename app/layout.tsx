@@ -27,8 +27,8 @@ const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-space
 const spaceMono = Space_Mono({ subsets: ['latin'], weight: ['400', '700'], variable: '--font-space-mono' })
 
 export const metadata: Metadata = {
-  title: 'USDC Onramp Demo',
-  description: 'Buy USDC into a connected MetaMask wallet via Circle Onramp Kit',
+  title: 'MonYuny',
+  description: 'Social Bank #MonYuny',
 }
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
