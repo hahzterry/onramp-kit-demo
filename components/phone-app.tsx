@@ -255,6 +255,16 @@ export function PhoneApp({
     mintSession(address)
   }
 
+  function send() {
+    if (!address || unsupported) return
+    setError('Send is not available in this demo.')
+  }
+
+  function withdraw() {
+    if (!address || unsupported) return
+    setError('Withdraw is not available in this demo.')
+  }
+
   // ⚠️ Route every tab. Anything that falls through renders WalletScreen,
   // which is wrong for the newly added Social / Live tabs.
   function renderTab() {
@@ -281,6 +291,8 @@ export function PhoneApp({
             }
             activity={activity}
             onAddMoney={addMoney}
+            onSend={send}
+            onWithdraw={withdraw}
             addMoneyHint={
               !address
                 ? 'Connect a wallet'
@@ -302,41 +314,41 @@ export function PhoneApp({
           />
         )
 
-case 'social':
-  return (
-    <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3 px-6 text-center">
-      <span className="text-5xl" role="img" aria-label="Social">💬</span>
-      <p className="text-sm text-muted-foreground">
-        Forum, Feed, Q&A, and Ideas
-      </p>
-      <a
-        href="https://social.monyuny.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mt-2 inline-flex items-center gap-2 rounded-full bg-[#008CFF] px-5 py-3 text-sm font-semibold text-white shadow-[0_0_30px_rgba(0,140,255,0.2)] transition-colors hover:bg-[#19AFFF]"
-      >
-        Open Social →
-      </a>
-    </div>
-  )
+      case 'social':
+        return (
+          <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3 px-6 text-center">
+            <span className="text-5xl" role="img" aria-label="Social">💬</span>
+            <p className="text-sm text-muted-foreground">
+              Forum, Feed, Q&amp;A, and Ideas
+            </p>
+            <a
+              href="https://social.monyuny.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 inline-flex items-center gap-2 rounded-full bg-[#008CFF] px-5 py-3 text-sm font-semibold text-white shadow-[0_0_30px_rgba(0,140,255,0.2)] transition-colors hover:bg-[#19AFFF]"
+            >
+              Open Social →
+            </a>
+          </div>
+        )
 
-case 'live':
-  return (
-    <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3 px-6 text-center">
-      <span className="text-5xl" role="img" aria-label="Live">🔴</span>
-      <p className="text-sm text-muted-foreground">
-        Watch and tip livestreams
-      </p>
-      <a
-        href="https://live.monyuny.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mt-2 inline-flex items-center gap-2 rounded-full bg-[#FF3B5C] px-5 py-3 text-sm font-semibold text-white shadow-[0_0_30px_rgba(255,59,92,0.25)] transition-colors hover:bg-[#FF5C77]"
-      >
-        Open Livestream →
-      </a>
-    </div>
-  )
+      case 'live':
+        return (
+          <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3 px-6 text-center">
+            <span className="text-5xl" role="img" aria-label="Live">🔴</span>
+            <p className="text-sm text-muted-foreground">
+              Watch and tip livestreams
+            </p>
+            <a
+              href="https://live.monyuny.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 inline-flex items-center gap-2 rounded-full bg-[#FF3B5C] px-5 py-3 text-sm font-semibold text-white shadow-[0_0_30px_rgba(255,59,92,0.25)] transition-colors hover:bg-[#FF5C77]"
+            >
+              Open Livestream →
+            </a>
+          </div>
+        )
     }
   }
 
