@@ -83,7 +83,7 @@ export function HomeScreen({
       <div className="flex items-center gap-4 px-5 pt-7 md:pt-3">
         <div className="flex-1">
           <h1 className="font-display text-[30px] leading-[1.1] font-medium tracking-[-0.03em]">
-            💰MonYuny🔴💬
+            💰MonYuny
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Livestream Social Banking
