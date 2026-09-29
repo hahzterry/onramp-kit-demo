@@ -86,23 +86,40 @@ export function HomeScreen({
            💰 MonYuny <span className="ml-1">💬</span>
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Your money. Your way.
+            Livestream Social Banking
           </p>
         </div>
 
         <div className="flex items-center gap-2 rounded-full border border-border bg-card px-2.5 py-1.5 shadow-[0_0_20px_rgba(0,140,255,0.08)]">
-          <Image
-            src="/icons/tokens/usdc.svg"
-            alt=""
-            width={25}
-            height={25}
-            className="rounded-full"
-          />
-          <span className="text-sm font-semibold text-foreground">
-            USDC
-          </span>
+        <a
+        href="https://social.monyuny.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-2"
+        >
+        <span className="text-[25px] leading-none" role="img" aria-label="USDC">
+        💬
+        </span>
+        <span className="text-sm font-semibold text-foreground">
+        Social
+        </span>
+        </a>
         </div>
-      </div>
+                <div className="flex items-center gap-2 rounded-full border border-border bg-card px-2.5 py-1.5 shadow-[0_0_20px_rgba(0,140,255,0.08)]">
+        <a
+        href="https://live.monyuny.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-2"
+        >
+        <span className="text-[25px] leading-none" role="img" aria-label="USDC">
+        🔴
+        </span>
+        <span className="text-sm font-semibold text-foreground">
+        Live
+        </span>
+        </a>
+        </div>
 
       {/* Balance */}
       <div className="mt-8 px-5">
