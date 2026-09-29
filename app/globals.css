@@ -5,471 +5,228 @@ export const MonYunyLogo = ({
 }) => {
   return (
     <svg
-      viewBox="0 0 500 180"
+      viewBox="0 0 400 120"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
-      role="img"
-      aria-label="MonYuny"
     >
       <defs>
-        {/* =====================================================
-            MONYUNY BRAND COLORS
-            ===================================================== */}
-        {/* Dominant Electric Blue */}
-        <linearGradient
-          id="monyunyBlue"
-          x1="0"
-          y1="0"
-          x2="1"
-          y2="1"
-        >
-          <stop offset="0%" stopColor="#19AFFF" />
-          <stop offset="100%" stopColor="#0066FF" />
+        {/* Blue */}
+        <linearGradient id="assetGradient" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#19AFFF" stopOpacity="1" />
+          <stop offset="100%" stopColor="#0066FF" stopOpacity="1" />
         </linearGradient>
-        {/* Bright Money Green */}
-        <linearGradient
-          id="monyunyGreen"
-          x1="0"
-          y1="0"
-          x2="1"
-          y2="1"
-        >
+
+        {/* Green money */}
+        <linearGradient id="moneyGradient" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0%" stopColor="#5BEF68" />
           <stop offset="100%" stopColor="#16A63A" />
         </linearGradient>
-        {/* Gold / Yellow Coins */}
-        <linearGradient
-          id="monyunyGold"
-          x1="0"
-          y1="0"
-          x2="0"
-          y2="1"
-        >
+
+        {/* Gold coins */}
+        <linearGradient id="goldGradient" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#FFE95A" />
           <stop offset="100%" stopColor="#F2B900" />
         </linearGradient>
-        {/* Strong Sticker Shadow */}
+
+        {/* Blue glow */}
+        <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="4" result="blur" />
+          <feComposite
+            in="SourceGraphic"
+            in2="blur"
+            operator="over"
+          />
+        </filter>
+
+        {/* Black sticker shadow */}
         <filter
-          id="monyunyShadow"
-          x="-30%"
-          y="-30%"
-          width="160%"
-          height="170%"
+          id="shadow"
+          x="-20%"
+          y="-20%"
+          width="150%"
+          height="160%"
         >
           <feDropShadow
-            dx="5"
-            dy="7"
+            dx="3"
+            dy="4"
             stdDeviation="0"
             floodColor="#000000"
             floodOpacity="1"
           />
         </filter>
-        {/* Blue Glow */}
-        <filter
-          id="monyunyGlow"
-          x="-50%"
-          y="-50%"
-          width="200%"
-          height="200%"
-        >
-          <feGaussianBlur
-            stdDeviation="2.5"
-            result="blur"
-          />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
       </defs>
-      {/* =====================================================
-          MAIN BLUE STICKER SHAPE
-          ===================================================== */}
-      <path
-        d="
-          M62 44
-          C45 46 32 57 28 72
-          C23 91 31 112 47 123
-          C37 137 43 153 59 159
-          C75 165 91 158 101 149
-          C119 162 143 166 163 157
-          C182 168 205 168 224 158
-          C245 169 270 165 285 151
-          C303 160 324 156 334 141
-          C349 151 368 146 374 130
-          C391 137 409 127 411 110
-          C425 103 429 86 420 74
-          C426 57 414 42 398 39
-          C390 23 372 17 356 24
-          C344 10 321 8 307 19
-          C289 8 265 10 252 23
-          C232 11 208 13 195 27
-          C177 14 151 15 138 29
-          C120 19 96 23 87 39
-          C78 38 69 39 62 44
-          Z
-        "
-        fill="url(#monyunyBlue)"
-        stroke="#000000"
-        strokeWidth="8"
-        strokeLinejoin="round"
-        filter="url(#monyunyShadow)"
-      />
-      {/* =====================================================
-          BLUE SPLASH ACCENTS
-          ===================================================== */}
-      <path
-        d="M38 52 C20 44 12 31 20 19"
-        stroke="#000000"
-        strokeWidth="12"
-        strokeLinecap="round"
-      />
-      <path
-        d="M38 52 C20 44 12 31 20 19"
-        stroke="#19AFFF"
-        strokeWidth="7"
-        strokeLinecap="round"
-      />
-      <path
-        d="M414 52 C431 44 439 31 433 20"
-        stroke="#000000"
-        strokeWidth="12"
-        strokeLinecap="round"
-      />
-      <path
-        d="M414 52 C431 44 439 31 433 20"
-        stroke="#19AFFF"
-        strokeWidth="7"
-        strokeLinecap="round"
-      />
-      <path
-        d="M48 132 C29 139 21 151 29 162"
-        stroke="#000000"
-        strokeWidth="11"
-        strokeLinecap="round"
-      />
-      <path
-        d="M48 132 C29 139 21 151 29 162"
-        stroke="#19AFFF"
-        strokeWidth="6"
-        strokeLinecap="round"
-      />
-      <path
-        d="M398 132 C417 140 424 151 415 162"
-        stroke="#000000"
-        strokeWidth="11"
-        strokeLinecap="round"
-      />
-      <path
-        d="M398 132 C417 140 424 151 415 162"
-        stroke="#19AFFF"
-        strokeWidth="6"
-        strokeLinecap="round"
-      />
-      {/* =====================================================
-          GREEN STACK OF MONEY
-          ===================================================== */}
-      <g
-        transform="translate(54 101) rotate(-8)"
+
+      {/* Main white card */}
+      <rect
+        x="10"
+        y="20"
+        width="380"
+        height="80"
+        rx="18"
+        fill="#FFFFFF"
         stroke="#000000"
         strokeWidth="4"
-        strokeLinejoin="round"
-      >
-        {/* Back bill */}
-        <rect
-          x="0"
-          y="11"
-          width="58"
-          height="29"
-          rx="5"
-          fill="#12852F"
-        />
-        {/* Middle bill */}
-        <rect
-          x="6"
-          y="6"
-          width="58"
-          height="29"
-          rx="5"
-          fill="#20B943"
-        />
-        {/* Front bill */}
-        <rect
-          x="12"
-          y="0"
-          width="58"
-          height="29"
-          rx="5"
-          fill="url(#monyunyGreen)"
-        />
-        {/* Bill center */}
-        <circle
-          cx="41"
-          cy="14.5"
-          r="9"
-          fill="none"
-          stroke="#FFFFFF"
+        filter="url(#shadow)"
+      />
+
+      {/* Blue inner border */}
+      <rect
+        x="14"
+        y="24"
+        width="372"
+        height="72"
+        rx="15"
+        stroke="#008CFF"
+        strokeWidth="2"
+      />
+
+      {/* Green money icon */}
+      <g transform="translate(40, 35)">
+        <path
+          d="M0 15 L15 0 L30 15 L15 30 Z"
+          fill="url(#moneyGradient)"
+          stroke="#000000"
           strokeWidth="2"
+          strokeLinejoin="round"
         />
-        {/* Dollar */}
+
+        <path
+          d="M5 15 L15 5 L25 15 L15 25 Z"
+          fill="#22C55E"
+          stroke="#000000"
+          strokeWidth="1.5"
+        />
+
         <text
-          x="41"
-          y="19"
+          x="15"
+          y="20"
           textAnchor="middle"
-          fontFamily="Arial Black, Arial, sans-serif"
-          fontSize="13"
+          fontFamily="Arial, sans-serif"
           fontWeight="900"
+          fontSize="12"
           fill="#FFFFFF"
-          stroke="none"
         >
           $
         </text>
       </g>
-      {/* =====================================================
-          CROWN
-          ===================================================== */}
-      <g transform="translate(365 24)">
-        {/* Black outer crown */}
+
+      {/* Blue crown / splash */}
+      <g transform="translate(320, 30)">
         <path
-          d="
-            M0 31
-            L8 7
-            L22 20
-            L35 0
-            L48 20
-            L63 7
-            L71 31
-            Z
-          "
-          fill="#000000"
-          stroke="#000000"
-          strokeWidth="8"
-          strokeLinejoin="round"
-        />
-        {/* Blue crown */}
-        <path
-          d="
-            M3 29
-            L10 9
-            L23 21
-            L35 3
-            L47 21
-            L61 9
-            L68 29
-            Z
-          "
-          fill="url(#monyunyBlue)"
-          stroke="#0066FF"
-          strokeWidth="2"
-          strokeLinejoin="round"
-          filter="url(#monyunyGlow)"
-        />
-        {/* White crown highlight */}
-        <path
-          d="M12 26 L19 13 L27 22"
-          stroke="#FFFFFF"
-          strokeWidth="4"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        {/* Crown center jewel */}
-        <circle
-          cx="35"
-          cy="28"
-          r="4"
-          fill="#FFFFFF"
-          stroke="#000000"
-          strokeWidth="2"
-        />
-        {/* Gold crown jewels */}
-        <circle
-          cx="9"
-          cy="7"
-          r="3"
-          fill="#FFD21F"
-          stroke="#000000"
-          strokeWidth="2"
-        />
-        <circle
-          cx="62"
-          cy="7"
-          r="3"
-          fill="#FFD21F"
-          stroke="#000000"
-          strokeWidth="2"
-        />
-      </g>
-      {/* =====================================================
-          MONYUNY WORDMARK
-          ===================================================== */}
-      <g
-        fontFamily="Arial Black, Arial, sans-serif"
-        fontWeight="900"
-        fontSize="62"
-        letterSpacing="-4"
-        paintOrder="stroke fill"
-      >
-        {/* BLACK SHADOW */}
-        <text
-          x="91"
-          y="113"
-          fill="#000000"
-          stroke="#000000"
-          strokeWidth="14"
-          strokeLinejoin="round"
-        >
-          Mon
-        </text>
-        {/* WHITE MON */}
-        <text
-          x="91"
-          y="113"
-          fill="#FFFFFF"
-          stroke="#000000"
-          strokeWidth="6"
-          strokeLinejoin="round"
-        >
-          Mon
-        </text>
-        {/* BLUE Y */}
-        <text
-          x="245"
-          y="113"
+          d="M0 15 L5 5 L12 12 L20 0 L28 12 L35 5 L40 15 Z"
           fill="#008CFF"
           stroke="#000000"
-          strokeWidth="8"
+          strokeWidth="2"
           strokeLinejoin="round"
+          filter="url(#glow)"
+        />
+
+        <circle
+          cx="20"
+          cy="18"
+          r="2"
+          fill="#FFFFFF"
+        />
+
+        <circle
+          cx="-5"
+          cy="5"
+          r="2"
+          fill="#19AFFF"
+        />
+
+        <circle
+          cx="45"
+          cy="2"
+          r="1.5"
+          fill="#19AFFF"
+        />
+      </g>
+
+      {/* MonYuny wordmark */}
+      <g transform="translate(80, 75)">
+        <text
+          fontFamily="Arial Black, Arial, sans-serif"
+          fontWeight="900"
+          fontSize="42"
+          fill="#000000"
+          letterSpacing="-0.02em"
+        >
+          Mon
+        </text>
+
+        {/* Blue Y */}
+        <text
+          fontFamily="Arial Black, Arial, sans-serif"
+          fontWeight="900"
+          fontSize="42"
+          fill="#008CFF"
+          stroke="#000000"
+          strokeWidth="1"
+          letterSpacing="-0.02em"
+          x="82"
         >
           Y
         </text>
-        {/* WHITE UNY */}
+
         <text
-          x="286"
-          y="113"
-          fill="#FFFFFF"
-          stroke="#000000"
-          strokeWidth="6"
-          strokeLinejoin="round"
+          fontFamily="Arial Black, Arial, sans-serif"
+          fontWeight="900"
+          fontSize="42"
+          fill="#000000"
+          letterSpacing="-0.02em"
+          x="112"
         >
           uny
         </text>
+
+        {/* Blue underline */}
+        <rect
+          x="0"
+          y="8"
+          width="180"
+          height="3"
+          fill="#008CFF"
+          rx="6"
+        />
       </g>
-      {/* =====================================================
-          GOLD COIN #1
-          ===================================================== */}
-      <g transform="translate(325 122) rotate(-12)">
-        {/* Coin thickness */}
-        <ellipse
-          cx="0"
-          cy="7"
-          rx="20"
-          ry="9"
-          fill="#C48A00"
-          stroke="#000000"
-          strokeWidth="4"
-        />
-        {/* Coin face */}
-        <ellipse
-          cx="0"
-          cy="0"
-          rx="20"
-          ry="9"
-          fill="url(#monyunyGold)"
-          stroke="#000000"
-          strokeWidth="4"
-        />
-        <ellipse
-          cx="0"
-          cy="0"
-          rx="12"
-          ry="5"
-          fill="none"
+
+      {/* Gold coins */}
+      <g transform="translate(45, 80)">
+        {/* Back coin */}
+        <circle
+          cx="8"
+          cy="5"
+          r="7"
+          fill="#FFE95A"
           stroke="#000000"
           strokeWidth="2"
         />
-      </g>
-      {/* =====================================================
-          GOLD COIN #2 + DOLLAR SIGN
-          ===================================================== */}
-      <g transform="translate(366 138) rotate(10)">
-        {/* Coin thickness */}
-        <ellipse
-          cx="0"
+
+        {/* Front coin */}
+        <circle
+          cx="15"
           cy="8"
-          rx="24"
-          ry="10"
-          fill="#C48A00"
-          stroke="#000000"
-          strokeWidth="4"
-        />
-        {/* Coin face */}
-        <ellipse
-          cx="0"
-          cy="0"
-          rx="24"
-          ry="10"
-          fill="url(#monyunyGold)"
-          stroke="#000000"
-          strokeWidth="4"
-        />
-        {/* Inner ring */}
-        <ellipse
-          cx="0"
-          cy="0"
-          rx="15"
-          ry="6"
-          fill="none"
+          r="7"
+          fill="url(#goldGradient)"
           stroke="#000000"
           strokeWidth="2"
         />
+
         {/* Dollar sign */}
         <text
-          x="0"
-          y="6"
+          x="15"
+          y="12"
           textAnchor="middle"
-          fontFamily="Arial Black, Arial, sans-serif"
-          fontSize="19"
+          fontFamily="Arial, sans-serif"
           fontWeight="900"
+          fontSize="9"
           fill="#000000"
-          stroke="none"
         >
           $
         </text>
       </g>
-      {/* =====================================================
-          BLUE SWOOSH
-          ===================================================== */}
-      {/* Black sticker outline */}
-      <path
-        d="M105 132 C171 155 275 154 350 126"
-        stroke="#000000"
-        strokeWidth="12"
-        strokeLinecap="round"
-        fill="none"
-      />
-      {/* Blue center */}
-      <path
-        d="M105 129 C171 151 275 151 350 123"
-        stroke="#19AFFF"
-        strokeWidth="7"
-        strokeLinecap="round"
-        fill="none"
-      />
-      {/* Small blue sparkle */}
-      <path
-        d="M83 73 L87 82 L96 86 L87 90 L83 99 L79 90 L70 86 L79 82 Z"
-        fill="#FFFFFF"
-        stroke="#000000"
-        strokeWidth="3"
-      />
-      {/* Small blue sparkle */}
-      <path
-        d="M405 78 L408 85 L415 88 L408 91 L405 98 L402 91 L395 88 L402 85 Z"
-        fill="#FFFFFF"
-        stroke="#000000"
-        strokeWidth="3"
-      />
     </svg>
   );
 };
