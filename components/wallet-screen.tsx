@@ -1,25 +1,7 @@
-/**
- * Copyright 2026 Circle Internet Group, Inc.  All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * SPDX-License-Identifier: Apache-2.0
- */
-
 'use client'
 
-import { useEffect, useState, useMemo } from 'react'
-import MetaMaskSDK from '@metamask/sdk'
+import { useEffect, useState } from 'react'
+import { createEVMClient } from '@metamask/connect-evm'
 import { CopyIcon, WalletIcon } from './icons'
 
 const BUTTON =
@@ -42,95 +24,86 @@ export function WalletScreen({
   const [copiedAt, setCopiedAt] = useState(0)
   const [connecting, setConnecting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [evmClient, setEvmClient] = useState<Awaited<ReturnType<typeof createEVMClient>> | null>(null)
 
-  // Initialize the SDK once per component lifecycle
-  const ethereum = useMemo(() => {
-    // The SDK automatically detects mobile vs desktop and handles deep linking
-    const MMSDK = new MetaMaskSDK()
-    return MMSDK.getProvider()
-  }, [])
+  // Initialize the MetaMask Connect EVM client once on mount.
+  // ⚠️ createEVMClient returns a Promise — it MUST be awaited.
+  useEffect(() => {
+    let cancelled = false
+
+    ;(async () => {
+      try {
+        const client = await createEVMClient({
+          dapp: {
+            name: 'Monyuny Onramp',
+            url: window.location.href,
+          },
+          api: {
+            supportedNetworks: {
+              // Arc Testnet — Chain ID 5042002 = 0x4CEF52
+              '0x4CEF52': 'https://rpc.testnet.arc.io',
+            },
+          },
+        })
+
+        if (cancelled) return
+        setEvmClient(client)
+
+        const provider = client.getProvider()
+        provider.on('accountsChanged', (accounts: string[]) => {
+          if (accounts.length === 0) {
+            onDisconnect()
+          } else if (accounts[0]) {
+            onConnect(accounts[0])
+          }
+        })
+      } catch (err) {
+        if (!cancelled) {
+          setError(
+            err instanceof Error ? err.message : 'Failed to initialize MetaMask.',
+          )
+        }
+      }
+    })()
+
+    return () => {
+      cancelled = true
+    }
+  }, [onConnect, onDisconnect])
 
   useEffect(() => {
     if (!copiedAt) return
-
-    const id = setTimeout(() => {
-      setCopiedAt(0)
-    }, 1500)
-
+    const id = setTimeout(() => setCopiedAt(0), 1500)
     return () => clearTimeout(id)
   }, [copiedAt])
-
-  useEffect(() => {
-    if (!ethereum?.on) return
-
-    const handleAccountsChanged = (...args: unknown[]) => {
-      const accounts = args[0]
-
-      if (!Array.isArray(accounts)) {
-        return
-      }
-
-      const nextAddress = accounts[0]
-
-      if (typeof nextAddress === 'string' && nextAddress) {
-        onConnect(nextAddress)
-      } else {
-        onDisconnect()
-      }
-    }
-
-    ethereum.on('accountsChanged', handleAccountsChanged)
-
-    return () => {
-      ethereum?.removeListener?.(
-        'accountsChanged',
-        handleAccountsChanged,
-      )
-    }
-  }, [ethereum, onConnect, onDisconnect])
 
   const connectMetaMask = async () => {
     setError(null)
 
-    // Check if the SDK provider is available
-    if (!ethereum) {
-      setError(
-        'MetaMask is not available. Please install MetaMask.',
-      )
+    if (!evmClient) {
+      setError('MetaMask is still loading. Please wait a moment and try again.')
       return
     }
 
     try {
       setConnecting(true)
 
-      // Use the SDK's ethereum provider here
-      const result = await ethereum.request({
-        method: 'eth_requestAccounts',
+      // ⚠️ connect() returns { accounts, chainId } — not a raw array.
+      // Pass chainIds as hex strings. Arc Testnet is 0x4CEF52.
+      const { accounts } = await evmClient.connect({
+        chainIds: ['0x4CEF52'],
       })
 
-      if (!Array.isArray(result)) {
-        throw new Error('MetaMask did not return an account.')
-      }
-
-      const accounts = result.filter(
-        (account): account is string => typeof account === 'string',
-      )
-
-      if (!accounts[0]) {
+      if (!accounts || !accounts[0]) {
         throw new Error('No MetaMask account was returned.')
       }
 
       onConnect(accounts[0])
-    } catch (err) {
+    } catch (err: any) {
       const message =
-        err instanceof Error
-          ? err.message
-          : 'MetaMask connection failed.'
+        err instanceof Error ? err.message : 'MetaMask connection failed.'
 
-      if (
-        message.toLowerCase().includes('user rejected') ||
-        message.toLowerCase().includes('user denied')
-      ) {
+      if (err?.code === 4001 || message.toLowerCase().includes('user rejected')) {
         setError('Connection cancelled.')
       } else {
         setError(message)
@@ -140,9 +113,19 @@ export function WalletScreen({
     }
   }
 
+  const disconnect = async () => {
+    if (evmClient) {
+      try {
+        await evmClient.disconnect()
+      } catch {
+        // Ignore — local state is cleared regardless.
+      }
+    }
+    onDisconnect()
+  }
+
   const copy = async () => {
     if (!address) return
-
     try {
       await navigator.clipboard.writeText(address)
       setCopiedAt(Date.now())
@@ -175,18 +158,15 @@ export function WalletScreen({
               <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#22C55E]/15">
                 <span className="text-xl">🟢</span>
               </div>
-
               <div className="min-w-0 flex-1">
                 <p className="text-xs font-semibold uppercase tracking-wider text-[#5BEF68]">
                   Connected
                 </p>
-
                 <p className="mt-1 truncate font-mono text-sm text-foreground">
                   {shortenAddress(address)}
                 </p>
               </div>
             </div>
-
             <div className="border-t border-[#22C55E]/15 px-4 py-3">
               <p className="text-xs leading-relaxed text-muted-foreground">
                 USDC you buy will be delivered to this wallet.
@@ -199,12 +179,10 @@ export function WalletScreen({
               <p className="text-xs font-medium text-muted-foreground">
                 Wallet address
               </p>
-
               <p className="mt-1 truncate font-mono text-sm text-foreground">
                 {address}
               </p>
             </div>
-
             <div className="relative shrink-0">
               <button
                 type="button"
@@ -214,7 +192,6 @@ export function WalletScreen({
               >
                 <CopyIcon className="size-[18px]" />
               </button>
-
               {copiedAt > 0 && (
                 <span
                   role="status"
@@ -232,11 +209,7 @@ export function WalletScreen({
             </div>
           )}
 
-          <button
-            type="button"
-            onClick={onDisconnect}
-            className={BUTTON}
-          >
+          <button type="button" onClick={disconnect} className={BUTTON}>
             Disconnect
           </button>
         </div>
@@ -247,12 +220,8 @@ export function WalletScreen({
               <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-[#F6851B]/10 text-3xl">
                 🦊
               </div>
-
               <div>
-                <p className="font-semibold text-foreground">
-                  MetaMask
-                </p>
-
+                <p className="font-semibold text-foreground">MetaMask</p>
                 <p className="mt-1 text-sm text-muted-foreground">
                   Your wallet. Your money.
                 </p>
@@ -263,9 +232,9 @@ export function WalletScreen({
           <button
             type="button"
             onClick={connectMetaMask}
-            disabled={connecting}
+            disabled={connecting || !evmClient}
             className={`${BUTTON} ${
-              connecting
+              connecting || !evmClient
                 ? 'cursor-wait opacity-60'
                 : 'bg-[#008CFF] text-white shadow-[0_0_30px_rgba(0,140,255,0.2)] hover:bg-[#19AFFF]'
             }`}
@@ -285,9 +254,7 @@ export function WalletScreen({
 
           {error && (
             <div className="rounded-2xl border border-[#FF3B5C]/30 bg-[#FF3B5C]/10 px-4 py-3">
-              <p className="text-sm leading-relaxed text-[#FF8095]">
-                {error}
-              </p>
+              <p className="text-sm leading-relaxed text-[#FF8095]">{error}</p>
             </div>
           )}
 
