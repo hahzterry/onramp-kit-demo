@@ -54,7 +54,7 @@ export function HomeScreen({
       emoji: '💸',
       primary: true,
       hint: addMoneyHint,
-      hintAlign: 'left',
+      hintAlign: 'left' as const,
       onClick: onAddMoney,
     },
     {
@@ -63,7 +63,7 @@ export function HomeScreen({
       emoji: '🚀',
       primary: false,
       hint: 'Coming soon',
-      hintAlign: 'center',
+      hintAlign: 'center' as const,
       onClick: undefined,
     },
     {
@@ -72,7 +72,7 @@ export function HomeScreen({
       emoji: '💰',
       primary: false,
       hint: 'Coming soon',
-      hintAlign: 'center',
+      hintAlign: 'center' as const,
       onClick: undefined,
     },
   ]
@@ -83,7 +83,7 @@ export function HomeScreen({
       <div className="flex items-center gap-4 px-5 pt-7 md:pt-3">
         <div className="flex-1">
           <h1 className="font-display text-[30px] leading-[1.1] font-medium tracking-[-0.03em]">
-           💰 MonYuny <span className="ml-1">💬</span>
+            💰 MonYuny <span className="ml-1">💬</span>
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Livestream Social Banking
@@ -91,35 +91,37 @@ export function HomeScreen({
         </div>
 
         <div className="flex items-center gap-2 rounded-full border border-border bg-card px-2.5 py-1.5 shadow-[0_0_20px_rgba(0,140,255,0.08)]">
-        <a
-        href="https://social.monyuny.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-2"
-        >
-        <span className="text-[25px] leading-none" role="img" aria-label="USDC">
-        💬
-        </span>
-        <span className="text-sm font-semibold text-foreground">
-        Social
-        </span>
-        </a>
+          <a
+            href="https://social.monyuny.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2"
+          >
+            <span className="text-[25px] leading-none" role="img" aria-label="Social">
+              💬
+            </span>
+            <span className="text-sm font-semibold text-foreground">
+              Social
+            </span>
+          </a>
         </div>
-                <div className="flex items-center gap-2 rounded-full border border-border bg-card px-2.5 py-1.5 shadow-[0_0_20px_rgba(0,140,255,0.08)]">
-        <a
-        href="https://live.monyuny.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-2"
-        >
-        <span className="text-[25px] leading-none" role="img" aria-label="USDC">
-        🔴
-        </span>
-        <span className="text-sm font-semibold text-foreground">
-        Live
-        </span>
-        </a>
+
+        <div className="flex items-center gap-2 rounded-full border border-border bg-card px-2.5 py-1.5 shadow-[0_0_20px_rgba(0,140,255,0.08)]">
+          <a
+            href="https://live.monyuny.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2"
+          >
+            <span className="text-[25px] leading-none" role="img" aria-label="Live">
+              🔴
+            </span>
+            <span className="text-sm font-semibold text-foreground">
+              Live
+            </span>
+          </a>
         </div>
+      </div>
 
       {/* Balance */}
       <div className="mt-8 px-5">
@@ -206,10 +208,7 @@ export function HomeScreen({
                         : 'group-hover:scale-105'
                     }`}
                   >
-                    <Icon
-                      className="size-6"
-                      strokeWidth={1.8}
-                    />
+                    <Icon className="size-6" strokeWidth={1.8} />
                   </div>
 
                   <span className="text-xs font-semibold text-muted-foreground">
