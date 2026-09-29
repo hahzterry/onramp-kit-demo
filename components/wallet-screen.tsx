@@ -18,7 +18,8 @@
 
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
+import MetaMaskSDK from '@metamask/sdk'
 import { CopyIcon, WalletIcon } from './icons'
 
 const BUTTON =
@@ -42,6 +43,13 @@ export function WalletScreen({
   const [connecting, setConnecting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  // Initialize the SDK once per component lifecycle
+  const ethereum = useMemo(() => {
+    // The SDK automatically detects mobile vs desktop and handles deep linking
+    const MMSDK = new MetaMaskSDK()
+    return MMSDK.getProvider()
+  }, [])
+
   useEffect(() => {
     if (!copiedAt) return
 
@@ -53,7 +61,7 @@ export function WalletScreen({
   }, [copiedAt])
 
   useEffect(() => {
-    if (!window.ethereum?.on) return
+    if (!ethereum?.on) return
 
     const handleAccountsChanged = (...args: unknown[]) => {
       const accounts = args[0]
@@ -71,22 +79,23 @@ export function WalletScreen({
       }
     }
 
-    window.ethereum.on('accountsChanged', handleAccountsChanged)
+    ethereum.on('accountsChanged', handleAccountsChanged)
 
     return () => {
-      window.ethereum?.removeListener?.(
+      ethereum?.removeListener?.(
         'accountsChanged',
         handleAccountsChanged,
       )
     }
-  }, [onConnect, onDisconnect])
+  }, [ethereum, onConnect, onDisconnect])
 
   const connectMetaMask = async () => {
     setError(null)
 
-    if (!window.ethereum) {
+    // Check if the SDK provider is available
+    if (!ethereum) {
       setError(
-        'MetaMask is not installed. Open this page in a browser with MetaMask.',
+        'MetaMask is not available. Please install MetaMask.',
       )
       return
     }
@@ -94,7 +103,8 @@ export function WalletScreen({
     try {
       setConnecting(true)
 
-      const result = await window.ethereum.request({
+      // Use the SDK's ethereum provider here
+      const result = await ethereum.request({
         method: 'eth_requestAccounts',
       })
 
