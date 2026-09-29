@@ -21,27 +21,8 @@
 import { useEffect, useState } from 'react'
 import { CopyIcon, WalletIcon } from './icons'
 
-declare global {
-  interface Window {
-    ethereum?: {
-      request: (args: {
-        method: string
-        params?: unknown[]
-      }) => Promise<unknown>
-      on?: (
-        event: string,
-        handler: (...args: unknown[]) => void,
-      ) => void
-      removeListener?: (
-        event: string,
-        handler: (...args: unknown[]) => void,
-      ) => void
-    }
-  }
-}
-
 const BUTTON =
-  'inline-flex h-14 w-full shrink-0 items-center justify-center gap-2 rounded-2xl border border-transparent bg-secondary px-4 text-base font-semibold whitespace-nowrap text-secondary-foreground transition-all outline-none select-none hover:bg-[color-mix(in_oklch,var(--color-secondary),var(--color-foreground)_7%)] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/30 active:scale-[0.99]'
+  'inline-flex h-14 w-full shrink-0 items-center justify-center gap-2 rounded-2xl border border-transparent bg-clip-padding bg-secondary px-4 text-base font-semibold whitespace-nowrap text-secondary-foreground transition-all outline-none select-none hover:bg-[color-mix(in_oklch,var(--color-secondary),var(--color-foreground)_5%)] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 active:translate-y-px'
 
 function shortenAddress(address: string) {
   if (address.length < 12) return address
@@ -72,21 +53,25 @@ export function WalletScreen({
   }, [copiedAt])
 
   useEffect(() => {
-    const handleAccountsChanged = (...args: unknown[]) => {
-      const accounts = args[0] as string[] | undefined
-      const nextAddress = accounts?.[0]
+    if (!window.ethereum?.on) return
 
-      if (nextAddress) {
+    const handleAccountsChanged = (...args: unknown[]) => {
+      const accounts = args[0]
+
+      if (!Array.isArray(accounts)) {
+        return
+      }
+
+      const nextAddress = accounts[0]
+
+      if (typeof nextAddress === 'string' && nextAddress) {
         onConnect(nextAddress)
       } else {
         onDisconnect()
       }
     }
 
-    window.ethereum?.on?.(
-      'accountsChanged',
-      handleAccountsChanged,
-    )
+    window.ethereum.on('accountsChanged', handleAccountsChanged)
 
     return () => {
       window.ethereum?.removeListener?.(
@@ -109,11 +94,19 @@ export function WalletScreen({
     try {
       setConnecting(true)
 
-      const accounts = (await window.ethereum.request({
+      const result = await window.ethereum.request({
         method: 'eth_requestAccounts',
-      })) as string[]
+      })
 
-      if (!accounts?.[0]) {
+      if (!Array.isArray(result)) {
+        throw new Error('MetaMask did not return an account.')
+      }
+
+      const accounts = result.filter(
+        (account): account is string => typeof account === 'string',
+      )
+
+      if (!accounts[0]) {
         throw new Error('No MetaMask account was returned.')
       }
 
@@ -122,7 +115,7 @@ export function WalletScreen({
       const message =
         err instanceof Error
           ? err.message
-          : 'MetaMask connection was cancelled.'
+          : 'MetaMask connection failed.'
 
       if (
         message.toLowerCase().includes('user rejected') ||
@@ -143,6 +136,7 @@ export function WalletScreen({
     try {
       await navigator.clipboard.writeText(address)
       setCopiedAt(Date.now())
+      setError(null)
     } catch {
       setError('Could not copy the wallet address.')
     }
@@ -150,7 +144,6 @@ export function WalletScreen({
 
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-background px-6 pb-28 [scrollbar-width:none]">
-      {/* Header */}
       <div className="pt-10 md:pt-6">
         <div className="mb-3 flex size-14 items-center justify-center rounded-2xl border border-[#008CFF]/30 bg-[#008CFF]/10 text-[#19AFFF]">
           <WalletIcon className="size-7" strokeWidth={1.7} />
@@ -167,7 +160,6 @@ export function WalletScreen({
 
       {address ? (
         <div className="mt-7 flex flex-col gap-4">
-          {/* Connected wallet */}
           <div className="overflow-hidden rounded-[22px] border border-[#22C55E]/30 bg-[#22C55E]/5">
             <div className="flex items-center gap-3 px-4 py-4">
               <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#22C55E]/15">
@@ -192,7 +184,6 @@ export function WalletScreen({
             </div>
           </div>
 
-          {/* Full address */}
           <div className="flex items-center gap-2 rounded-2xl border border-border bg-card px-4 py-3">
             <div className="min-w-0 flex-1">
               <p className="text-xs font-medium text-muted-foreground">
@@ -225,6 +216,12 @@ export function WalletScreen({
             </div>
           </div>
 
+          {error && (
+            <div className="rounded-2xl border border-[#FF3B5C]/30 bg-[#FF3B5C]/10 px-4 py-3">
+              <p className="text-sm text-[#FF8095]">{error}</p>
+            </div>
+          )}
+
           <button
             type="button"
             onClick={onDisconnect}
@@ -235,7 +232,6 @@ export function WalletScreen({
         </div>
       ) : (
         <div className="mt-7 flex flex-col gap-4">
-          {/* MetaMask card */}
           <div className="rounded-[22px] border border-border bg-card p-5">
             <div className="flex items-center gap-4">
               <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-[#F6851B]/10 text-3xl">
@@ -248,7 +244,7 @@ export function WalletScreen({
                 </p>
 
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Connect your wallet
+                  Your wallet. Your money.
                 </p>
               </div>
             </div>
@@ -286,7 +282,7 @@ export function WalletScreen({
           )}
 
           <p className="text-center text-xs leading-relaxed text-muted-foreground">
-            Your wallet stays yours. MonYuny never gets your private key. 🔐
+            Your wallet stays yours. Your keys stay yours. 🔐
           </p>
         </div>
       )}
