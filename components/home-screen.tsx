@@ -32,6 +32,8 @@ export function HomeScreen({
   prompt,
   activity = [],
   onAddMoney,
+  onSend,
+  onWithdraw,
   addMoneyHint,
 }: {
   balance?: number
@@ -43,6 +45,8 @@ export function HomeScreen({
   } | null
   activity?: ActivityEntry[]
   onAddMoney: () => void
+  onSend: () => void
+  onWithdraw: () => void
   addMoneyHint?: string | null
 }) {
   const [whole, cents] = formatBalance(balance)
@@ -62,18 +66,18 @@ export function HomeScreen({
       label: 'Send',
       emoji: '🚀',
       primary: false,
-      hint: 'Coming soon',
+      hint: null,
       hintAlign: 'center' as const,
-      onClick: undefined,
+      onClick: onSend,
     },
     {
       icon: ArrowDownIcon,
       label: 'Withdraw',
       emoji: '💰',
       primary: false,
-      hint: 'Coming soon',
+      hint: null,
       hintAlign: 'center' as const,
-      onClick: undefined,
+      onClick: onWithdraw,
     },
   ]
 
@@ -193,7 +197,7 @@ export function HomeScreen({
               <div key={label} className="group relative">
                 <button
                   type="button"
-                  onClick={hint ? undefined : onClick}
+                  onClick={onClick}
                   aria-disabled={hint ? true : undefined}
                   className="flex w-full flex-col items-center gap-2"
                 >
